@@ -19,9 +19,14 @@ COPY . .
 
 RUN composer install --no-dev --optimize-autoloader
 
-RUN mkdir -p storage/framework/{cache,sessions,views}
+RUN mkdir -p storage/framework/cache \
+    storage/framework/sessions \
+    storage/framework/views
+
 RUN chmod -R 775 storage bootstrap/cache
 
 EXPOSE 8080
 
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8080"]
+ENV SERVER_NAME=:8080
+
+CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile"]
