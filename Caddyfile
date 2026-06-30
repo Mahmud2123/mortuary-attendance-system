@@ -1,13 +1,21 @@
 {
-    auto_https off
+    # Let Caddy handle HTTPS automatically
+    # Remove auto_https off if present
 }
 
 :8080 {
     root * /app/public
-
+    
     encode gzip zstd
-
+    
     php_server
-
+    
     file_server
+    
+    # Add header for security
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "DENY"
+    }
 }
